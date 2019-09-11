@@ -11,10 +11,10 @@ import (
 
 // @Summary 登录
 // @Produce  json
-// @Param username path string true "username"
-// @Param password path string true "password"
-// @Success 200 {json} json "{"code":200,"data":{},"msg":"ok"}"
-// @Router /manager/account/login [post]
+// @Param username formData string true "用户名"
+// @Param password formData string true "密码"
+// @Success 200 {object} resp.ResponseModel
+// @Router /manager/account/login/ [post]
 func Login(ctx *gin.Context) {
 	ret := &resp.ResponseModel{Context: ctx, Code: e.ERROR}
 	defer resp.ResponseJSON(ret)

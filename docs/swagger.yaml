@@ -1,4 +1,14 @@
 basePath: '{{.BasePath}}'
+definitions:
+  resp.ResponseModel:
+    properties:
+      code:
+        type: integer
+      data:
+        type: object
+      msg:
+        type: string
+    type: object
 host: '{{.Host}}'
 info:
   contact: {}
@@ -7,16 +17,16 @@ info:
   title: '{{.Title}}'
   version: '{{.Version}}'
 paths:
-  /manager/account/login:
+  /manager/account/login/:
     post:
       parameters:
-      - description: username
-        in: path
+      - description: 用户名
+        in: formData
         name: username
         required: true
         type: string
-      - description: password
-        in: path
+      - description: 密码
+        in: formData
         name: password
         required: true
         type: string
@@ -24,8 +34,9 @@ paths:
       - application/json
       responses:
         "200":
-          description: '{"code":200,"data":{},"msg":"ok"}'
+          description: OK
           schema:
-            type: json
+            $ref: '#/definitions/resp.ResponseModel'
+            type: object
       summary: 登录
 swagger: "2.0"

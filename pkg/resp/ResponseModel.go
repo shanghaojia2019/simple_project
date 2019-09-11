@@ -7,9 +7,9 @@ import (
 
 type ResponseModel struct {
 	Context *gin.Context `json:"-"`
-	Code    int
-	Msg     string
-	Data    interface{}
+	Code    int          `json:"code"`
+	Msg     string       `json:"msg"`
+	Data    interface{}  `json:"data"`
 }
 
 //ResponseJSON 通用返回数据格式
