@@ -1,19 +1,58 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "{{.Description}}",
-        "title": "{{.Title}}",
-        "contact": {},
-        "license": {},
-        "version": "{{.Version}}"
+        "description": "This is a sample server celler server.",
+        "title": "Swagger Example API",
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "name": "API Support",
+            "url": "http://www.swagger.io/support",
+            "email": "support@swagger.io"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0"
     },
-    "host": "{{.Host}}",
-    "basePath": "{{.BasePath}}",
+    "host": "localhost:8989",
+    "basePath": "/",
     "paths": {
-        "/manager/account/login/": {
-            "post": {
+        "/manager/account/getinfo/": {
+            "get": {
+                "description": "获取当前用户信息",
+                "consumes": [
+                    "application/json"
+                ],
                 "produces": [
                     "application/json"
+                ],
+                "tags": [
+                    "后台用户管理"
+                ],
+                "summary": "获取当前登录用户信息",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/resp.ResponseModel"
+                        }
+                    }
+                }
+            }
+        },
+        "/manager/account/login/": {
+            "post": {
+                "description": "后台用户登录接口",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "后台用户管理"
                 ],
                 "summary": "登录",
                 "parameters": [
@@ -27,6 +66,46 @@
                     {
                         "type": "string",
                         "description": "密码",
+                        "name": "password",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/resp.ResponseModel"
+                        }
+                    }
+                }
+            }
+        },
+        "/manager/account/updatePassword/": {
+            "post": {
+                "description": "修改当前登录用户密码",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "后台用户管理"
+                ],
+                "summary": "修改当前用户密码",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "原密码",
+                        "name": "oldPassword",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "新密码",
                         "name": "password",
                         "in": "formData",
                         "required": true
@@ -59,5 +138,55 @@
                 }
             }
         }
+    },
+    "securityDefinitions": {
+        "ApiKeyAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        },
+        "BasicAuth": {
+            "type": "basic"
+        },
+        "OAuth2AccessCode": {
+            "type": "oauth2",
+            "flow": "accessCode",
+            "authorizationUrl": "https://example.com/oauth/authorize",
+            "tokenUrl": "https://example.com/oauth/token",
+            "scopes": {
+                "admin": " Grants read and write access to administrative information"
+            }
+        },
+        "OAuth2Application": {
+            "type": "oauth2",
+            "flow": "application",
+            "tokenUrl": "https://example.com/oauth/token",
+            "scopes": {
+                "admin": " Grants read and write access to administrative information",
+                "write": " Grants write access"
+            }
+        },
+        "OAuth2Implicit": {
+            "type": "oauth2",
+            "flow": "implicit",
+            "authorizationUrl": "https://example.com/oauth/authorize",
+            "scopes": {
+                "admin": " Grants read and write access to administrative information",
+                "write": " Grants write access"
+            }
+        },
+        "OAuth2Password": {
+            "type": "oauth2",
+            "flow": "password",
+            "tokenUrl": "https://example.com/oauth/token",
+            "scopes": {
+                "admin": " Grants read and write access to administrative information",
+                "read": " Grants read access",
+                "write": " Grants write access"
+            }
+        }
+    },
+    "x-extension-openapi": {
+        "example": "value on a json format"
     }
 }

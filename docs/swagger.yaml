@@ -1,4 +1,4 @@
-basePath: '{{.BasePath}}'
+basePath: /
 definitions:
   resp.ResponseModel:
     properties:
@@ -9,16 +9,41 @@ definitions:
       msg:
         type: string
     type: object
-host: '{{.Host}}'
+host: localhost:8989
 info:
-  contact: {}
-  description: '{{.Description}}'
-  license: {}
-  title: '{{.Title}}'
-  version: '{{.Version}}'
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is a sample server celler server.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Swagger Example API
+  version: "1.0"
 paths:
+  /manager/account/getinfo/:
+    get:
+      consumes:
+      - application/json
+      description: 获取当前用户信息
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/resp.ResponseModel'
+            type: object
+      summary: 获取当前登录用户信息
+      tags:
+      - 后台用户管理
   /manager/account/login/:
     post:
+      consumes:
+      - multipart/form-data
+      description: 后台用户登录接口
       parameters:
       - description: 用户名
         in: formData
@@ -39,4 +64,71 @@ paths:
             $ref: '#/definitions/resp.ResponseModel'
             type: object
       summary: 登录
+      tags:
+      - 后台用户管理
+  /manager/account/updatePassword/:
+    post:
+      consumes:
+      - application/json
+      description: 修改当前登录用户密码
+      parameters:
+      - description: 原密码
+        in: formData
+        name: oldPassword
+        required: true
+        type: string
+      - description: 新密码
+        in: formData
+        name: password
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/resp.ResponseModel'
+            type: object
+      summary: 修改当前用户密码
+      tags:
+      - 后台用户管理
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+  BasicAuth:
+    type: basic
+  OAuth2AccessCode:
+    authorizationUrl: https://example.com/oauth/authorize
+    flow: accessCode
+    scopes:
+      admin: ' Grants read and write access to administrative information'
+    tokenUrl: https://example.com/oauth/token
+    type: oauth2
+  OAuth2Application:
+    flow: application
+    scopes:
+      admin: ' Grants read and write access to administrative information'
+      write: ' Grants write access'
+    tokenUrl: https://example.com/oauth/token
+    type: oauth2
+  OAuth2Implicit:
+    authorizationUrl: https://example.com/oauth/authorize
+    flow: implicit
+    scopes:
+      admin: ' Grants read and write access to administrative information'
+      write: ' Grants write access'
+    type: oauth2
+  OAuth2Password:
+    flow: password
+    scopes:
+      admin: ' Grants read and write access to administrative information'
+      read: ' Grants read access'
+      write: ' Grants write access'
+    tokenUrl: https://example.com/oauth/token
+    type: oauth2
 swagger: "2.0"
+x-extension-openapi:
+  example: value on a json format

@@ -2,6 +2,7 @@ package jwt
 
 import (
 	"net/http"
+	"simple_project/pkg/setting"
 
 	"github.com/dgrijalva/jwt-go"
 
@@ -12,15 +13,15 @@ import (
 )
 
 // JWT is jwt middleware
-func AccountJWT() gin.HandlerFunc {
+func ManagerJWT() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var code int
 		var data interface{}
 
 		code = e.SUCCESS
-		token := c.GetHeader("token")
+		token := c.GetHeader(setting.AppSetting.AuthKey)
 		if token == "" {
-			code = e.INVALID_PARAMS
+			code = e.NO_AUTH
 		} else {
 			_, err := utils.ParseToken(token)
 			if err != nil {

@@ -9,9 +9,11 @@ import (
 
 //App 程序配置Model
 type App struct {
-	JwtSecret string
-	PageSize  int
-	Prefixurl string
+	JwtSecret      string
+	AuthExpireTime time.Duration
+	AuthKey        string
+	PageSize       int
+	Prefixurl      string
 
 	RuntimeRootPath string
 
