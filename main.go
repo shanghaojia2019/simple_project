@@ -2,18 +2,35 @@ package main
 
 import (
 	"context"
+	"fmt"
+	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
 	"os"
 	"os/signal"
+	"simple_project/database"
+	"simple_project/pkg/setting"
 	"simple_project/routers"
 	"strconv"
 	"time"
 )
 
+func init() {
+	//初始化配置
+	setting.Setup()
+	fmt.Printf("%+v", *setting.AppSetting)
+}
+
 func main() {
+
+	//初始化数据库
+	database.InitDataSources(true)
+	database.PGClient.LogMode(true)
+	//初始化表
+	database.InitTables()
+	gin.SetMode(setting.ServerSetting.RunMode)
 	router := routers.InitServer()
-	router.Run("0.0.0.0:" + strconv.Itoa(8989)) //启动web服务
+	_ = router.Run("0.0.0.0:" + strconv.Itoa(setting.ServerSetting.HttpPort)) //启动web服务
 
 	//优雅的关闭服务
 	srv := &http.Server{
