@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
 	"os"
@@ -13,6 +12,9 @@ import (
 	"simple_project/routers"
 	"strconv"
 	"time"
+
+	"github.com/gin-gonic/gin"
+	"github.com/robfig/cron"
 )
 
 func init() {
@@ -73,8 +75,8 @@ func main() {
 	database.InitTables()
 	gin.SetMode(setting.ServerSetting.RunMode)
 	router := routers.InitServer()
-	_ = router.Run("0.0.0.0:" + strconv.Itoa(setting.ServerSetting.HttpPort)) //启动web服务
-
+	//_ = router.Run("0.0.0.0:" + strconv.Itoa(setting.ServerSetting.HttpPort)) //启动web服务
+	go Task()
 	//优雅的关闭服务
 	srv := &http.Server{
 		Addr:    ":" + strconv.Itoa(setting.ServerSetting.HttpPort),
@@ -97,4 +99,12 @@ func main() {
 		log.Fatal("Server Shutdown:", err)
 	}
 	log.Println("Server exiting")
+}
+
+func Task() {
+	crontask := cron.New()
+	crontask.AddFunc("0/2 * * * * ? ", func() {
+		println("task run")
+	})
+	crontask.Start()
 }
